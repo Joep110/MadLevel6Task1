@@ -7,12 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.madlevel6task1.R
+import com.example.madlevel6task1.model.ColorItem
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_color.*
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class ColorFragment : Fragment() {
+
+    private val colors = arrayListOf<ColorItem>()
+    private lateinit var colorAdapter: ColorAdapter
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -25,8 +33,16 @@ class ColorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<Button>(R.id.button_first).setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }
+        colorAdapter = ColorAdapter(colors, ::onColorClick)
+        rvColors.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        rvColors.adapter = colorAdapter
+
+        observeColors()
     }
+
+
+    private fun onColorClick(colorItem: ColorItem) {
+        Snackbar.make(rvColors, "This color is: ${colorItem.name}", Snackbar.LENGTH_LONG).show()
+    }
+
 }
